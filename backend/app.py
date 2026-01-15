@@ -1,15 +1,14 @@
-from flask import Flask, request, jsonify, send_from_directory
+from flask import Flask, request, jsonify
 from flask_cors import CORS
 import requests
-import os
 import json
 from datetime import datetime
 
-app = Flask(__name__, static_folder='../', static_url_path='')
-CORS(app)  # 允许所有域名访问（仅测试用）
+app = Flask(__name__)
+CORS(app)  # 允许所有域名访问
 
-# 配置
-DEEPSEEK_API_KEY = "YOUR_API_KEY_HERE"  # 稍后替换为你的真实API密钥
+# 配置 - 稍后需要修改API密钥
+DEEPSEEK_API_KEY = "sk-xxxxxxxxxxxxxxxxxxxx"  # 先留空，稍后填你的API密钥
 DEEPSEEK_API_URL = "https://api.deepseek.com/v1/chat/completions"
 
 # 本地知识库（当API不可用时使用）
@@ -34,10 +33,20 @@ KNOWLEDGE_BASE = {
     }
 }
 
+# ======= 基础路由 =======
 @app.route('/')
 def index():
-    """主页面"""
-    return send_from_directory(app.static_folder, 'index.html')
+    """主页 - 简单显示API运行中"""
+    return jsonify({
+        "message": "AI公考自习室API服务运行中",
+        "status": "active",
+        "endpoints": {
+            "健康检查": "/api/health",
+            "AI聊天": "/api/chat (POST)",
+            "生成学习计划": "/api/create_plan (POST)",
+            "获取科目": "/api/subjects"
+        }
+    })
 
 @app.route('/api/health')
 def health_check():
@@ -46,9 +55,11 @@ def health_check():
         "status": "healthy",
         "service": "AI公考自习室",
         "version": "1.0.0",
-        "timestamp": datetime.now().isoformat()
+        "timestamp": datetime.now().isoformat(),
+        "api_key_set": bool(DEEPSEEK_API_KEY and DEEPSEEK_API_KEY != "sk-xxxxxxxxxxxxxxxxxxxx")
     })
 
+# ======= 核心功能 =======
 @app.route('/api/chat', methods=['POST'])
 def chat():
     """处理聊天请求"""
@@ -72,8 +83,8 @@ def chat():
                 "source": "local_knowledge"
             })
         
-        # 2. 尝试调用DeepSeek API
-        if DEEPSEEK_API_KEY and DEEPSEEK_API_KEY != "YOUR_API_KEY_HERE":
+        # 2. 尝试调用DeepSeek API（如果设置了API密钥）
+        if DEEPSEEK_API_KEY and DEEPSEEK_API_KEY != "sk-xxxxxxxxxxxxxxxxxxxx":
             try:
                 ai_reply = call_deepseek_api(user_message)
                 if ai_reply:
@@ -243,9 +254,9 @@ def get_subjects():
         ]
     })
 
+# ======= 启动应用 =======
 if __name__ == '__main__':
     print("🚀 AI公考自习室后端启动中...")
-    print(f"📁 静态文件目录: {app.static_folder}")
     print("🌐 请在浏览器访问: http://localhost:5000")
     print("🔄 按 Ctrl+C 停止服务")
     

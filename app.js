@@ -1,7 +1,7 @@
 // 配置信息 - 后面部署时会修改
 const CONFIG = {
-    apiUrl: 'http://localhost:5000/api',  // 本地测试用
-    status: 'development'
+    apiUrl: 'https://byj2033.pythonanywhere.com/api',
+    status: 'production'
 };
 
 // DOM元素
