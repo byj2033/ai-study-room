@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI公考自习室 - 测试版</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; }
+        .main-card { max-width: 800px; margin: 50px auto; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+        .chat-container { height: 400px; overflow-y: auto; background: #f8f9fa; border-radius: 10px; padding: 20px; }
+        .user-msg { background: #007bff; color: white; padding: 10px 15px; border-radius: 18px 18px 0 18px; margin: 10px 0 10px auto; max-width: 80%; }
+        .ai-msg { background: #e9ecef; color: #333; padding: 10px 15px; border-radius: 18px 18px 18px 0; margin: 10px auto 10px 0; max-width: 80%; }
+        .typing { display: none; color: #6c757d; font-style: italic; }
+        .btn-quick { margin: 5px; transition: all 0.3s; }
+        .btn-quick:hover { transform: translateY(-2px); }
+    </style>
+</head>
+<body>
+    <div class="container py-5">
+        <div class="card main-card">
+            <div class="card-header bg-primary text-white">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h3 class="mb-0">🤖 AI公考自习室</h3>
+                    <span class="badge bg-light text-primary">测试版</span>
+                </div>
+                <p class="mb-0 mt-2 small">专为考公考生设计的智能学习助手</p >
+            </div>
+            
+            <div class="card-body">
+                <!-- 状态提示 -->
+                <div class="alert alert-info d-flex align-items-center">
+                    <div class="spinner-border spinner-border-sm me-2" role="status"></div>
+                    <span id="statusText">正在连接AI服务...</span>
+                </div>
+                
+                <!-- 聊天区域 -->
+                <div class="mb-4">
+                    <h5 class="mb-3">💬 智能答疑区</h5>
+                    <div id="chatArea" class="chat-container mb-3">
+                        <div class="ai-msg">
+                            你好！我是你的公考AI助手，可以解答：
+                            <ul class="mb-0 mt-2">
+                                <li>行测（言语理解、数量关系等）</li>
+                                <li>申论写作技巧</li>
+                                <li>备考计划制定</li>
+                                <li>时政热点分析</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="typing" id="typingIndicator">
+                        <div class="ai-msg">
+                            <span class="typing-dots">AI正在思考</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 输入区域 -->
+                <div class="input-group mb-3">
+                    <input type="text" id="userInput" class="form-control form-control-lg" 
+                           placeholder="输入问题，如：行测数量关系解题技巧..." 
+                           onkeypress="if(event.keyCode==13) sendMessage()">
+                    <button class="btn btn-primary btn-lg" onclick="sendMessage()">
+                        <span id="sendIcon">📤</span> 发送
+                    </button>
+                </div>
+                
+                <!-- 快捷问题按钮 -->
+                <div class="mb-4">
+                    <h6 class="mb-3">🚀 快捷提问：</h6>
+                    <div class="d-flex flex-wrap">
+                        <button class="btn btn-outline-primary btn-quick" onclick="quickQuestion('行测各模块时间分配建议')">⏰ 时间分配</button>
+                        <button class="btn btn-outline-success btn-quick" onclick="quickQuestion('申论大作文写作框架')">✍️ 申论框架</button>
+                        <button class="btn btn-outline-warning btn-quick" onclick="quickQuestion('最新时政热点整理')">📰 时政热点</button>
+                        <button class="btn btn-outline-info btn-quick" onclick="quickQuestion('30天备考计划制定')">📅 备考计划</button>
+                        <button class="btn btn-outline-danger btn-quick" onclick="quickQuestion('公务员面试技巧')">💼 面试技巧</button>
+                    </div>
+                </div>
+                
+                <!-- 功能区 -->
+                <div class="row mt-4">
+                    <div class="col-md-6 mb-3">
+                        <div class="card h-100">
+                            <div class="card-body text-center">
+                                <h5>📚 学习计划</h5>
+                                <button class="btn btn-outline-primary mt-2" onclick="generatePlan()">生成个性化计划</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="card h-100">
+                            <div class="card-body text-center">
+                                <h5>⏱️ 专注计时</h5>
+                                <button class="btn btn-outline-success mt-2" onclick="startTimer()">开始25分钟专注</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card-footer text-center text-muted small">
+                <p class="mb-1">当前使用DeepSeek AI技术 | 数据仅用于学习优化</p >
+                <p class="mb-0">遇到问题？<a href=" " onclick="showHelp()">点击查看帮助</a ></p >
+            </div>
+        </div>
+    </div>
+
+    <!-- 引入JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
