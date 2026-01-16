@@ -45,8 +45,10 @@ async function askAI() {
   
   try {
     // 调用Vercel部署的API
-    const response = await fetch('https://ai-study-room-git-main-byj2033-projects.vercel.app/api/ask-ai', {
-      method: 'POST',
+    const response = await fetch('https://ai-study-room-psi.vercel.app/api/ask-ai', {
+  method: 'POST',
+  // ...
+})
       headers: {
         'Content-Type': 'application/json',
       },
